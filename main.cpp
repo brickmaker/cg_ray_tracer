@@ -15,11 +15,12 @@ int main() {
     const int height = 100;
     const int width = 150;
 
-//    std::string inputfile = "models/spot.obj";
-//    std::string inputfile = "models/box/box.obj";
-    std::string inputfile = "models/sphere/sphere.obj";
+//    std::string infile = "models/spot.obj";
+//    std::string infile = "models/box/box.obj";
+//    std::string infile = "models/sphere/sphere.obj";
+    std::string infile = "models/plane-cylinder/plane-cylinder.obj";
 
-    Mesh mesh(inputfile);
+    Mesh mesh(infile);
     Light light(glm::vec3(-1. / glm::sqrt(3.), -1. / glm::sqrt(3.), -1. / glm::sqrt(3.)));
 
 //    buffer_t buffer = Utils::show_vertices(mesh, width, height);
