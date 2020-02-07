@@ -12,13 +12,15 @@
 #include "libs/glm/ext.hpp"
 
 #include "Mesh.h"
+#include "Light.h"
 
 struct Renderer {
     Mesh mesh;
+    Light light;
     const int width;
     const int height;
 
-    Renderer(Mesh &mesh, int width, int height);
+    Renderer(Mesh &mesh, Light &light, int width, int height);
 
     buffer_t render();
 

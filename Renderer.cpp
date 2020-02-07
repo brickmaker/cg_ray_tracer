@@ -25,9 +25,7 @@ glm::vec3 Renderer::castSphere(Ray ray) {
 glm::vec3 Renderer::cast(Ray ray) {
     IntersectInfo intersectInfo{};
     if (intersect(ray, intersectInfo)) {
-        // simulate light
-        glm::vec3 light(0, 0, -1);
-        return glm::vec3(1.) * glm::max(glm::dot(-light, intersectInfo.normal), 0.f);
+        return glm::vec3(1.) * glm::max(glm::dot(-light.direction, intersectInfo.normal), 0.f);
 //        return glm::vec3(1.) * glm::abs(glm::dot(-light, intersectInfo.normal));
     }
 
@@ -55,7 +53,7 @@ buffer_t Renderer::render() {
     return buffer;
 }
 
-Renderer::Renderer(Mesh &mesh, const int width, const int height) : mesh(mesh), width(width), height(height) {}
+Renderer::Renderer(Mesh &mesh, Light &light, const int width, const int height) : mesh(mesh), light(light), width(width), height(height) {}
 
 bool Renderer::intersect(Ray ray, IntersectInfo &intersectInfo) {
 
