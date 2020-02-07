@@ -13,14 +13,16 @@
 
 #include "Mesh.h"
 #include "Light.h"
+#include "Camera.h"
 
 struct Renderer {
     Mesh mesh;
     Light light;
+    Camera camera;
     const int width;
     const int height;
 
-    Renderer(Mesh &mesh, Light &light, int width, int height);
+    Renderer(Mesh &mesh, Light &light, Camera &camera, int width, int height);
 
     buffer_t render();
 

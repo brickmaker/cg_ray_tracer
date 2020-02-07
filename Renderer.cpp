@@ -47,17 +47,22 @@ buffer_t Renderer::render() {
     buffer_t buffer(height, buffer_row_t(width));
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
-            Ray ray;
-            ray.origin = glm::vec3(x, y, 1);
-            ray.direction = glm::vec3(0, 0, -1);
-            buffer[height - y - 1][x] = cast(ortho_ray_transform(ray, width, height));
+//            Ray ray;
+//            ray.origin = glm::vec3(x, y, 1);
+//            ray.direction = glm::vec3(0, 0, -1);
+//            Ray cast_ray = ortho_ray_transform(ray, width, height);
+//            buffer[height - y - 1][x] = cast(cast_ray);
+            Ray cast_ray = camera.generate_ray(x, y);
+
+
+            buffer[height - y - 1][x] = cast(cast_ray);
         }
         fprintf(stderr, "\r%3d%c", uint32_t(y / (float) height * 100), '%');
     }
     return buffer;
 }
 
-Renderer::Renderer(Mesh &mesh, Light &light, const int width, const int height) : mesh(mesh), light(light), width(width), height(height) {}
+Renderer::Renderer(Mesh &mesh, Light &light, Camera &camera, const int width, const int height) : mesh(mesh), light(light), camera(camera), width(width), height(height) {}
 
 bool Renderer::intersect(Ray ray, IntersectInfo &intersectInfo) {
 
