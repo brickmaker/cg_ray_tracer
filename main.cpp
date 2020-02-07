@@ -20,7 +20,7 @@ int main() {
     std::string inputfile = "models/sphere/sphere.obj";
 
     Mesh mesh(inputfile);
-    Light light(glm::vec3(0., 0., -1.));
+    Light light(glm::vec3(-1. / glm::sqrt(3.), -1. / glm::sqrt(3.), -1. / glm::sqrt(3.)));
 
 //    buffer_t buffer = Utils::show_vertices(mesh, width, height);
     Renderer renderer(mesh, light, width, height);
