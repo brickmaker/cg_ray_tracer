@@ -12,8 +12,8 @@
 
 
 int main() {
-    const int height = 100;
-    const int width = 150;
+    const int height = 200;
+    const int width = 300;
 
 //    std::string infile = "models/spot.obj";
 //    std::string infile = "models/box/box.obj";

@@ -23,10 +23,14 @@ glm::vec3 Renderer::castSphere(Ray ray) {
 }
 
 glm::vec3 Renderer::cast(Ray ray) {
-    IntersectInfo intersectInfo{};
-    if (intersect(ray, intersectInfo)) {
-        return glm::vec3(1.) * glm::max(glm::dot(-light.direction, intersectInfo.normal), 0.f);
-//        return glm::vec3(1.) * glm::abs(glm::dot(-light, intersectInfo.normal));
+    IntersectInfo intersect_info{};
+    if (intersect(ray, intersect_info)) {
+        Ray shadow_ray(intersect_info.pos + EPSILON * -light.direction, -light.direction);
+        IntersectInfo shadow_intersect_info{};
+        if (!intersect(shadow_ray, shadow_intersect_info)) {
+            return glm::vec3(1.) * glm::max(glm::dot(-light.direction, intersect_info.normal), 0.f);
+        }
+//        return glm::vec3(1.) * glm::abs(glm::dot(-light, intersect_info.normal));
     }
 
     return glm::vec3(0.);

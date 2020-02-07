@@ -17,6 +17,7 @@ typedef std::vector<std::vector<glm::vec3>> buffer_t;
 typedef std::vector<glm::vec3> buffer_row_t;
 
 const float_t FLOAT_INF = std::numeric_limits<float_t>::max();
+const float_t EPSILON = 1e-6;
 
 struct Ray {
     glm::vec3 origin{};
