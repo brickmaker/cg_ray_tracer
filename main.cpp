@@ -23,7 +23,7 @@ int main() {
     std::string infile = "models/veach_mis/mis.obj";
 
     Mesh mesh(infile);
-//    Light light(glm::vec3(-1. / glm::sqrt(3.), -1. / glm::sqrt(3.), -1. / glm::sqrt(3.)));
+//    Light light(glm::vec3(-1, -1, -3));
 //    Camera camera(glm::vec3(-0.5, 0.2, 2.), glm::vec3(0., 0., 0.), glm::vec3(0., 1., 0.), 60, glm::vec2(width, height));
 
     // cbox config
@@ -31,8 +31,7 @@ int main() {
 //    Camera camera(glm::vec3(278, 273, -800), glm::vec3(278, 273, -799), glm::vec3(0., 1., 0.), 39.3077, glm::vec2(width, height));
 
     // veach config
-//    Light light(glm::vec3(-1, -1, -1));
-    Light light(glm::vec3(-1. / glm::sqrt(3.), -1. / glm::sqrt(3.), -1. / glm::sqrt(3.)));
+    Light light(glm::vec3(-1, -1, -3));
     Camera camera(glm::vec3(0, 2, 15), glm::vec3(0, -2, 2.5), glm::vec3(0., 1., 0.), 28, glm::vec2(width, height));
 
 //    buffer_t buffer = Utils::show_vertices(mesh, width, height);

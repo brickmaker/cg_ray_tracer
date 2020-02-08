@@ -5,6 +5,7 @@
 #define GLM_ENABLE_EXPERIMENTAL
 
 #include "Renderer.h"
+#include "Utils.h"
 
 glm::vec3 Renderer::castSphere(Ray ray) {
     float_t x = ray.origin.x;
@@ -28,7 +29,12 @@ glm::vec3 Renderer::cast(Ray ray) {
         Ray shadow_ray(intersect_info.pos + EPSILON * -light.direction, -light.direction);
         IntersectInfo shadow_intersect_info{};
         if (!intersect(shadow_ray, shadow_intersect_info)) {
-            return glm::vec3(1.) * glm::max(glm::dot(-light.direction, intersect_info.normal), 0.f);
+            float_t Kd = 1.;
+            float_t Ns = 5;
+            float_t Ks = 0.5;
+            glm::vec3 diffuse = Kd * glm::vec3(1.) * glm::max(glm::dot(-light.direction, intersect_info.normal), 0.f);
+            glm::vec3 specular = Ks * glm::vec3(1.) * glm::pow(glm::max(glm::dot(-light.direction, Utils::reflect_direction(intersect_info.normal, light.direction)), 0.f), Ns);
+            return diffuse + specular;
         }
 //        return glm::vec3(1.) * glm::abs(glm::dot(-light, intersect_info.normal));
     }

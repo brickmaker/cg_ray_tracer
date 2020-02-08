@@ -80,3 +80,7 @@ buffer_t Utils::show_vertices(Mesh &mesh, int width, int height) {
     }
     return buffer;
 }
+
+glm::vec3 Utils::reflect_direction(glm::vec3 normal, glm::vec3 in_direction) {
+    return in_direction - 2 * glm::dot(in_direction, normal) * normal;
+}
