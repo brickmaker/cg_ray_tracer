@@ -36,9 +36,9 @@ int main() {
 
 //    buffer_t buffer = Utils::show_vertices(mesh, width, height);
     Renderer renderer(mesh, light, camera, width, height);
-    buffer_t buffer = renderer.render();
+//    buffer_t buffer = renderer.render();
 
-    Utils::save_img(buffer);
+//    Utils::save_img(buffer);
 
     return 0;
 }
