@@ -24,22 +24,39 @@ glm::vec3 Renderer::castSphere(Ray ray) {
 }
 
 glm::vec3 Renderer::cast(Ray ray) {
+    glm::vec3 res(0.);
     IntersectInfo intersect_info{};
     if (intersect(ray, intersect_info)) {
+        auto material = mesh.materials[intersect_info.material_id];
+        float_t Ni = material.ior;
+        glm::vec3 refraction(0);
+        if (glm::abs(Ni - 1.) > EPSILON) {
+            bool is_in_dir = glm::dot(ray.direction, intersect_info.normal) < 0; // from out into object
+            glm::vec3 out_dir = Utils::refract_direction(intersect_info.normal, ray.direction, Ni);
+//                Ray refraction_ray(intersect_info.pos + EPSILON * intersect_info.normal * (is_in_dir ? -1. : 1.), out_dir);
+            Ray refraction_ray(intersect_info.pos + EPSILON * out_dir, out_dir);
+            refraction = cast(refraction_ray);
+//            std::cout << refraction.x << std::endl;
+            return refraction;
+        }
         Ray shadow_ray(intersect_info.pos + EPSILON * -light.direction, -light.direction);
         IntersectInfo shadow_intersect_info{};
         if (!intersect(shadow_ray, shadow_intersect_info)) {
-            float_t Kd = 1.;
-            float_t Ns = 5;
-            float_t Ks = 0.5;
+//            float_t Kd = 1.;
+//            float_t Ns = 5;
+//            float_t Ks = 0.5;
+            auto material = mesh.materials[intersect_info.material_id];
+            glm::vec3 Kd(material.diffuse[0], material.diffuse[1], material.diffuse[2]);
+            glm::vec3 Ks(material.specular[0], material.specular[1], material.specular[2]);
+            float_t Ns = material.shininess;
             glm::vec3 diffuse = Kd * glm::vec3(1.) * glm::max(glm::dot(-light.direction, intersect_info.normal), 0.f);
             glm::vec3 specular = Ks * glm::vec3(1.) * glm::pow(glm::max(glm::dot(-light.direction, Utils::reflect_direction(intersect_info.normal, light.direction)), 0.f), Ns);
-            return diffuse + specular;
+            res += diffuse + specular;
         }
 //        return glm::vec3(1.) * glm::abs(glm::dot(-light, intersect_info.normal));
     }
 
-    return glm::vec3(0.);
+    return res;
 }
 
 Ray Renderer::ortho_ray_transform(Ray ray, int width, int height) {
@@ -118,6 +135,7 @@ bool Renderer::intersect(Ray ray, IntersectInfo &intersectInfo) {
                 flag_intersect = true;
                 intersectInfo.shape_i = shape_i;
                 intersectInfo.face_i = face_i;
+                intersectInfo.material_id = mesh.shapes[shape_i].mesh.material_ids[face_i];
                 intersectInfo.pos = ray.origin + distance * ray.direction;
                 intersectInfo.normal = (1 - bary_pos.x - bary_pos.y) * normals[0] + bary_pos.x * normals[1] + bary_pos.y * normals[2];
 //                intersectInfo.normal = normal;

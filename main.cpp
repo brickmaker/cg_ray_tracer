@@ -20,25 +20,32 @@ int main() {
 //    std::string infile = "models/sphere/sphere.obj";
 //    std::string infile = "models/plane-cylinder/plane-cylinder.obj";
 //    std::string infile = "models/cbox/cbox.obj";
-    std::string infile = "models/veach_mis/mis.obj";
+//    std::string infile = "models/veach_mis/mis.obj";
+//    std::string infile = "models/multi-balls/multi-balls.obj";
+    std::string infile = "models/refraction/refraction.obj";
 
-    Mesh mesh(infile);
-//    Light light(glm::vec3(-1, -1, -3));
-//    Camera camera(glm::vec3(-0.5, 0.2, 2.), glm::vec3(0., 0., 0.), glm::vec3(0., 1., 0.), 60, glm::vec2(width, height));
+    // refraction config
+    Light light(glm::vec3(-1, -1, -1));
+    Camera camera(glm::vec3(0., 0., 3.), glm::vec3(0., 0., 0.), glm::vec3(0., 1., 0.), 60, glm::vec2(width, height));
+
+    // multi-ball config
+//    Light light(glm::vec3(-1, -1, -1));
+//    Camera camera(glm::vec3(0.5, 0., 2.5), glm::vec3(0., 0., 0.), glm::vec3(0., 1., 0.), 60, glm::vec2(width, height));
 
     // cbox config
 //    Light light(glm::vec3(0, 0, 1));
 //    Camera camera(glm::vec3(278, 273, -800), glm::vec3(278, 273, -799), glm::vec3(0., 1., 0.), 39.3077, glm::vec2(width, height));
 
     // veach config
-    Light light(glm::vec3(-1, -1, -3));
-    Camera camera(glm::vec3(0, 2, 15), glm::vec3(0, -2, 2.5), glm::vec3(0., 1., 0.), 28, glm::vec2(width, height));
+//    Light light(glm::vec3(-1, -1, -3));
+//    Camera camera(glm::vec3(0, 2, 15), glm::vec3(0, -2, 2.5), glm::vec3(0., 1., 0.), 28, glm::vec2(width, height));
 
+    Mesh mesh(infile);
 //    buffer_t buffer = Utils::show_vertices(mesh, width, height);
     Renderer renderer(mesh, light, camera, width, height);
-//    buffer_t buffer = renderer.render();
+    buffer_t buffer = renderer.render();
 
-//    Utils::save_img(buffer);
+    Utils::save_img(buffer);
 
     return 0;
 }

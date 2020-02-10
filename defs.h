@@ -31,6 +31,7 @@ struct Ray {
 struct IntersectInfo {
     size_t shape_i;
     size_t face_i;
+    size_t material_id;
     glm::vec3 pos;
     glm::vec3 normal;
     // TODO: not consider material

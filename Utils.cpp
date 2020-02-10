@@ -84,3 +84,29 @@ buffer_t Utils::show_vertices(Mesh &mesh, int width, int height) {
 glm::vec3 Utils::reflect_direction(glm::vec3 normal, glm::vec3 in_direction) {
     return in_direction - 2 * glm::dot(in_direction, normal) * normal;
 }
+
+glm::vec3 Utils::refract_direction(glm::vec3 normal, glm::vec3 in_direction, float_t n) {
+    float_t cos1_val = glm::clamp(glm::dot(normal, in_direction), -1.f, 1.f);
+
+    // out
+    glm::vec3 new_normal = normal;
+    float_t r = 1. / n; // ratio
+
+    if (cos1_val < 0) {
+        // in
+        cos1_val = -cos1_val;
+        new_normal = -normal;
+    } else {
+        // out
+        r = n;
+    }
+
+    float_t cos2_val = 1 - (1 - cos1_val * cos1_val) * (r * r);
+
+    // full reflection
+    if (cos2_val < 0) {
+        return glm::vec3(0);
+    }
+
+    return glm::normalize(in_direction * r - (cos1_val * r - glm::sqrt(cos2_val)) * new_normal);
+}
