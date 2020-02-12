@@ -199,5 +199,7 @@ void Mesh::load_obj(std::string &file) {
         exit(1);
     }
 
+    std::cout << "#shape: " << shapes.size() << std::endl;
+
 //    PrintInfo(attrib, shapes, materials);
 }

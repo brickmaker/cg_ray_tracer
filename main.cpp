@@ -9,6 +9,7 @@
 #include "Utils.h"
 #include "Mesh.h"
 #include "Light.h"
+#include "KDTree.h"
 
 
 int main() {
@@ -20,6 +21,7 @@ int main() {
 //    std::string infile = "models/sphere/sphere.obj";
 //    std::string infile = "models/plane-cylinder/plane-cylinder.obj";
 //    std::string infile = "models/cbox/cbox.obj";
+//    std::string infile = "models/diningroom/diningroom.obj";
 //    std::string infile = "models/veach_mis/mis.obj";
 //    std::string infile = "models/multi-balls/multi-balls.obj";
     std::string infile = "models/refraction/refraction.obj";
@@ -41,8 +43,9 @@ int main() {
 //    Camera camera(glm::vec3(0, 2, 15), glm::vec3(0, -2, 2.5), glm::vec3(0., 1., 0.), 28, glm::vec2(width, height));
 
     Mesh mesh(infile);
+    KDTree tree(mesh);
 //    buffer_t buffer = Utils::show_vertices(mesh, width, height);
-    Renderer renderer(mesh, light, camera, width, height);
+    Renderer renderer(mesh, tree, light, camera, width, height);
     buffer_t buffer = renderer.render();
 
     Utils::save_img(buffer);

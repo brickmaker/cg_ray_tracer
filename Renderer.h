@@ -14,21 +14,23 @@
 #include "Mesh.h"
 #include "Light.h"
 #include "Camera.h"
+#include "KDTree.h"
 
 struct Renderer {
-    Mesh mesh;
+    Mesh &mesh;
+    KDTree &tree;
     Light light;
     Camera camera;
     const int width;
     const int height;
 
-    Renderer(Mesh &mesh, Light &light, Camera &camera, int width, int height);
+    Renderer(Mesh &mesh, KDTree &tree, Light &light, Camera &camera, int width, int height);
 
     buffer_t render();
 
     glm::vec3 cast(Ray ray);
 
-    bool intersect(Ray ray, IntersectInfo &intersectInfo);
+//    bool intersect(Ray ray, IntersectInfo &intersectInfo);
 
     // TODO：test sphere cast
     glm::vec3 castSphere(Ray ray);
