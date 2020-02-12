@@ -77,7 +77,7 @@ buffer_t Renderer::render() {
 
             buffer[height - y - 1][x] = cast(cast_ray);
         }
-        fprintf(stderr, "\r%3d%c", uint32_t(y / (float) height * 100), '%');
+        fprintf(stderr, "\r%3d%c", uint32_t((float) (y + 1) / height * 100), '%');
     }
     return buffer;
 }
