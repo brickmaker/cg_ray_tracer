@@ -26,6 +26,7 @@ glm::vec3 Renderer::cast(Ray ray) {
     glm::vec3 res(0.);
     IntersectInfo intersect_info{};
     if (tree.intersect(ray, intersect_info)) {
+//        std::cout << "intersect" << std::endl; // TODO: debug
         auto material = mesh.materials[intersect_info.material_id];
         float_t Ni = material.ior;
         glm::vec3 refraction(0);
@@ -48,8 +49,8 @@ glm::vec3 Renderer::cast(Ray ray) {
             glm::vec3 Kd(material.diffuse[0], material.diffuse[1], material.diffuse[2]);
             glm::vec3 Ks(material.specular[0], material.specular[1], material.specular[2]);
             float_t Ns = material.shininess;
-            glm::vec3 diffuse = Kd * glm::vec3(1.) * glm::max(glm::dot(-light.direction, intersect_info.normal), 0.f);
-            glm::vec3 specular = Ks * glm::vec3(1.) * glm::pow(glm::max(glm::dot(-light.direction, Utils::reflect_direction(intersect_info.normal, light.direction)), 0.f), Ns);
+            glm::vec3 diffuse = Kd * glm::vec3(10.) * glm::max(glm::dot(-light.direction, intersect_info.normal), 0.f);
+            glm::vec3 specular = Ks * glm::vec3(10.) * glm::pow(glm::max(glm::dot(-light.direction, Utils::reflect_direction(intersect_info.normal, light.direction)), 0.f), Ns);
             res += diffuse + specular;
         }
 //        return glm::vec3(1.) * glm::abs(glm::dot(-light, intersect_info.normal));
