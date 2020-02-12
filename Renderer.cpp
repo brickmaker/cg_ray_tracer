@@ -11,7 +11,6 @@ glm::vec3 Renderer::castSphere(Ray ray) {
     float_t y = ray.origin.y;
     float_t r = 0.8;
     if (x * x + y * y < r) {
-        std::cout << x << " " << y << std::endl;
         float_t z = glm::sqrt(r - (x * x + y * y));
         glm::vec3 normal(x, y, z);
         normal = glm::normalize(normal);
@@ -26,7 +25,6 @@ glm::vec3 Renderer::cast(Ray ray) {
     glm::vec3 res(0.);
     IntersectInfo intersect_info{};
     if (tree.intersect(ray, intersect_info)) {
-//        std::cout << "intersect" << std::endl; // TODO: debug
         auto material = mesh.materials[intersect_info.material_id];
         float_t Ni = material.ior;
         glm::vec3 refraction(0);
@@ -36,7 +34,6 @@ glm::vec3 Renderer::cast(Ray ray) {
 //                Ray refraction_ray(intersect_info.pos + EPSILON * intersect_info.normal * (is_in_dir ? -1. : 1.), out_dir);
             Ray refraction_ray(intersect_info.pos + EPSILON * out_dir, out_dir);
             refraction = cast(refraction_ray);
-//            std::cout << refraction.x << std::endl;
             return refraction;
         }
         Ray shadow_ray(intersect_info.pos + EPSILON * -light.direction, -light.direction);
