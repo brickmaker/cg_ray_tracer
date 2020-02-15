@@ -25,35 +25,41 @@ glm::vec3 Renderer::cast(Ray ray) {
     glm::vec3 res(0.);
     IntersectInfo intersect_info{};
     if (tree.intersect(ray, intersect_info)) {
+
         auto material = mesh.materials[intersect_info.material_id];
         float_t Ni = material.ior;
         glm::vec3 Ka(material.ambient[0], material.ambient[1], material.ambient[2]);
         glm::vec3 refraction(0);
-        if (glm::abs(Ni - 1.) > EPSILON) {
+
+        if (Ka.x > EPSILON) {
+            // is light
+            res = Ka;
+        } else if (glm::abs(Ni - 1.) > EPSILON) {
+            // transparent
             bool is_in_dir = glm::dot(ray.direction, intersect_info.normal) < 0; // from out into object
             glm::vec3 out_dir = Utils::refract_direction(intersect_info.normal, ray.direction, Ni);
-//                Ray refraction_ray(intersect_info.pos + EPSILON * intersect_info.normal * (is_in_dir ? -1. : 1.), out_dir);
             Ray refraction_ray(intersect_info.pos + EPSILON * out_dir, out_dir);
-            refraction = cast(refraction_ray);
-            return refraction;
+            res = cast(refraction_ray);
+        } else {
+            // diffuse&specular
+            for (PointLight &light : lights) {
+                glm::vec3 light_dir = glm::normalize(intersect_info.pos - light.pos);
+                Ray shadow_ray(intersect_info.pos + EPSILON * -light_dir, -light_dir);
+                IntersectInfo shadow_intersect_info{};
+                bool shadow_intersect = tree.intersect(shadow_ray, shadow_intersect_info);
+                if (mesh.materials[shadow_intersect_info.material_id].name == light.material_name) {
+                    // simulate spherical light
+                    float_t final_intensity = (light.intensity * light.r * light.r) / (glm::length2(intersect_info.pos - light.pos));
+                    material = mesh.materials[intersect_info.material_id];
+                    glm::vec3 Kd(material.diffuse[0], material.diffuse[1], material.diffuse[2]);
+                    glm::vec3 Ks(material.specular[0], material.specular[1], material.specular[2]);
+                    float_t Ns = material.shininess;
+                    glm::vec3 diffuse = Kd * final_intensity * glm::max(glm::dot(-light_dir, intersect_info.normal), 0.f);
+                    glm::vec3 specular = Ks * final_intensity * glm::pow(glm::max(glm::dot(-light_dir, Utils::reflect_direction(intersect_info.normal, ray.direction)), 0.f), Ns);
+                    res += diffuse + specular;
+                }
+            }
         }
-        Ray shadow_ray(intersect_info.pos + EPSILON * -light.direction, -light.direction);
-        IntersectInfo shadow_intersect_info{};
-        if (!tree.intersect(shadow_ray, shadow_intersect_info)) {
-//            float_t Kd = 1.;
-//            float_t Ns = 5;
-//            float_t Ks = 0.5;
-            material = mesh.materials[intersect_info.material_id];
-            glm::vec3 Kd(material.diffuse[0], material.diffuse[1], material.diffuse[2]);
-            glm::vec3 Ks(material.specular[0], material.specular[1], material.specular[2]);
-            float_t Ns = material.shininess;
-            glm::vec3 diffuse = Kd * glm::vec3(5.) * glm::max(glm::dot(-light.direction, intersect_info.normal), 0.f);
-            glm::vec3 specular = Ks * glm::vec3(5.) * glm::pow(glm::max(glm::dot(-light.direction, Utils::reflect_direction(intersect_info.normal, light.direction)), 0.f), Ns);
-            res += diffuse + specular;
-        }
-//        res += Ka * glm::dot(intersect_info.normal, -ray.direction);
-        res += Ka;
-//        return glm::vec3(1.) * glm::abs(glm::dot(-light, intersect_info.normal));
     }
 
     return res;
@@ -85,5 +91,6 @@ buffer_t Renderer::render() {
     return buffer;
 }
 
-Renderer::Renderer(Mesh &mesh, KDTree &tree, Light &light, Camera &camera, const int width, const int height) : mesh(mesh), tree(tree), light(light), camera(camera), width(width), height(height) {}
+Renderer::Renderer(Mesh &mesh, KDTree &tree, vector<PointLight> &lights, Camera &camera, int width, int height) : mesh(mesh), tree(tree), lights(lights), camera(camera), width(width),
+                                                                                                                  height(height) {}
 
