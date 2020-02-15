@@ -27,6 +27,7 @@ glm::vec3 Renderer::cast(Ray ray) {
     if (tree.intersect(ray, intersect_info)) {
         auto material = mesh.materials[intersect_info.material_id];
         float_t Ni = material.ior;
+        glm::vec3 Ka(material.ambient[0], material.ambient[1], material.ambient[2]);
         glm::vec3 refraction(0);
         if (glm::abs(Ni - 1.) > EPSILON) {
             bool is_in_dir = glm::dot(ray.direction, intersect_info.normal) < 0; // from out into object
@@ -42,14 +43,16 @@ glm::vec3 Renderer::cast(Ray ray) {
 //            float_t Kd = 1.;
 //            float_t Ns = 5;
 //            float_t Ks = 0.5;
-            auto material = mesh.materials[intersect_info.material_id];
+            material = mesh.materials[intersect_info.material_id];
             glm::vec3 Kd(material.diffuse[0], material.diffuse[1], material.diffuse[2]);
             glm::vec3 Ks(material.specular[0], material.specular[1], material.specular[2]);
             float_t Ns = material.shininess;
-            glm::vec3 diffuse = Kd * glm::vec3(10.) * glm::max(glm::dot(-light.direction, intersect_info.normal), 0.f);
-            glm::vec3 specular = Ks * glm::vec3(10.) * glm::pow(glm::max(glm::dot(-light.direction, Utils::reflect_direction(intersect_info.normal, light.direction)), 0.f), Ns);
+            glm::vec3 diffuse = Kd * glm::vec3(5.) * glm::max(glm::dot(-light.direction, intersect_info.normal), 0.f);
+            glm::vec3 specular = Ks * glm::vec3(5.) * glm::pow(glm::max(glm::dot(-light.direction, Utils::reflect_direction(intersect_info.normal, light.direction)), 0.f), Ns);
             res += diffuse + specular;
         }
+//        res += Ka * glm::dot(intersect_info.normal, -ray.direction);
+        res += Ka;
 //        return glm::vec3(1.) * glm::abs(glm::dot(-light, intersect_info.normal));
     }
 
