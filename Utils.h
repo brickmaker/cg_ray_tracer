@@ -14,6 +14,8 @@ struct Utils {
 
     static glm::vec3 reflect_direction(glm::vec3 normal, glm::vec3 in_direction);
     static glm::vec3 refract_direction(glm::vec3 normal, glm::vec3 in_direction, float_t n);
+    static glm::vec3 random_in_sphere();
+    static float_t rand();
 
     static buffer_t show_vertices(Mesh &mesh, int width, int height);
 };

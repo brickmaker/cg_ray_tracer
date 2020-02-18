@@ -18,13 +18,22 @@ int main() {
 
 //    std::string infile = "models/spot.obj";
 //    std::string infile = "models/box/box.obj";
+//    std::string infile = "models/cornelbox/cornell-box.obj";
 //    std::string infile = "models/sphere/sphere.obj";
 //    std::string infile = "models/plane-cylinder/plane-cylinder.obj";
 //    std::string infile = "models/cbox/cbox.obj";
+//    std::string infile = "models/cbox-simple/cbox.obj";
 //    std::string infile = "models/diningroom/diningroom.obj";
     std::string infile = "models/veach_mis/mis.obj";
 //    std::string infile = "models/multi-balls/multi-balls.obj";
 //    std::string infile = "models/refraction/refraction.obj";
+
+    // CornellBox config
+//    const int width = 512;
+//    const int height = 512;
+//    vector<PointLight> point_lights;
+//    Light light(glm::vec3(0, 0, 1));
+//    Camera camera(glm::vec3(0, 2.6, 8), glm::vec3(0, 2.6, 0), glm::vec3(0., 1., 0.), 40, glm::vec2(width, height));
 
     // refraction config
 //    Light light(glm::vec3(-1, -1, -1));
@@ -35,19 +44,24 @@ int main() {
 //    Camera camera(glm::vec3(0.5, 0., 2.5), glm::vec3(0., 0., 0.), glm::vec3(0., 1., 0.), 60, glm::vec2(width, height));
 
     // cbox config
+//    const int width = 512;
+//    const int height = 512;
+//    vector<PointLight> point_lights;
 //    Light light(glm::vec3(0, 0, 1));
+//    vector<PointLight> point_lights{PointLight{glm::vec3(150, 225, 130), 80, 10, "cbox:light"}};
 //    Camera camera(glm::vec3(278, 273, -800), glm::vec3(278, 273, -799), glm::vec3(0., 1., 0.), 39.3077, glm::vec2(width, height));
 
     // dinning room config
 //    const int width = 1280;
 //    const int height = 720;
+//    vector<PointLight> point_lights;
 //    Light light(glm::vec3(0, 0, -1));
 //    Camera camera(glm::vec3(-0.5, 3, 5.5), glm::vec3(-0.5, 2, 0), glm::vec3(0., 1., 0.), 60, glm::vec2(width, height));
 
     // veach config
     const int width = 768;
     const int height = 512;
-    Light light(glm::vec3(-1, -1, -3));
+//    Light light(glm::vec3(-1, -1, -3));
     vector<PointLight> point_lights{
             PointLight{glm::vec3(-3.75, 0, 0), 0.03, 901.8, "mi:light1"},
             PointLight{glm::vec3(-1.25, 0, 0), 0.1, 100, "mi:light2"},

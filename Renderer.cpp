@@ -21,8 +21,11 @@ glm::vec3 Renderer::castSphere(Ray ray) {
     return glm::vec3(0);
 }
 
-glm::vec3 Renderer::cast(Ray ray) {
+glm::vec3 Renderer::cast(Ray ray, int depth = 0) {
     glm::vec3 res(0.);
+    if (depth > MAX_DEPTH) {
+        return res;
+    }
     IntersectInfo intersect_info{};
     if (tree.intersect(ray, intersect_info)) {
 
@@ -41,6 +44,7 @@ glm::vec3 Renderer::cast(Ray ray) {
             Ray refraction_ray(intersect_info.pos + EPSILON * out_dir, out_dir);
             res = cast(refraction_ray);
         } else {
+
             // diffuse&specular
             for (PointLight &light : lights) {
                 glm::vec3 light_dir = glm::normalize(intersect_info.pos - light.pos);
@@ -59,6 +63,20 @@ glm::vec3 Renderer::cast(Ray ray) {
                     res += diffuse + specular;
                 }
             }
+
+//            res *= 0.5; // propotion 0.5
+
+            // TODO: fake simulate random cast
+            glm::vec3 accumulate(0);
+            const int ray_num = 10;
+            for (int i = 0; i < ray_num; i++) {
+                glm::vec3 dir = glm::normalize(Utils::random_in_sphere() + intersect_info.normal);
+                Ray new_ray(intersect_info.pos + EPSILON * dir, dir);
+                accumulate += cast(new_ray, depth + 1);
+            }
+            glm::vec3 Kd(material.diffuse[0], material.diffuse[1], material.diffuse[2]);
+            res += 0.5 * Kd * accumulate / ray_num;
+//            return res;
         }
     }
 
@@ -82,6 +100,7 @@ buffer_t Renderer::render() {
 //            Ray cast_ray = ortho_ray_transform(ray, width, height);
 //            buffer[height - y - 1][x] = cast(cast_ray);
             Ray cast_ray = camera.generate_ray(x, y);
+//            std::cout << cast_ray.direction.x << cast_ray.direction.z << std::endl;
 
 
             buffer[height - y - 1][x] = cast(cast_ray);

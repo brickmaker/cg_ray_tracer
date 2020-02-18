@@ -3,6 +3,7 @@
 //
 
 #include "Utils.h"
+#include "libs/glm/gtx/norm.hpp"
 
 void Utils::save_img(buffer_t buffer) {
     const int height = buffer.size();
@@ -109,4 +110,16 @@ glm::vec3 Utils::refract_direction(glm::vec3 normal, glm::vec3 in_direction, flo
     }
 
     return glm::normalize(in_direction * r - (cos1_val * r - glm::sqrt(cos2_val)) * new_normal);
+}
+
+glm::vec3 Utils::random_in_sphere() {
+    glm::vec3 p;
+    do {
+        p = 2.0f * glm::vec3(Utils::rand(), Utils::rand(), Utils::rand()) - glm::vec3(1, 1, 1);
+    } while (glm::length2(p) >= 1);
+    return p;
+}
+
+float_t Utils::rand() {
+    return (float_t) std::rand() / RAND_MAX;
 }
