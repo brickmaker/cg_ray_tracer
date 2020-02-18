@@ -26,7 +26,7 @@ struct NormalCoord {
         } else {
             w = glm::normalize(glm::vec3(0, -v.z, v.y));
         }
-        u = glm::cross(v, w);
+        u = glm::normalize(glm::cross(v, w));
 
         base_u = glm::vec3(u.x, v.x, w.x);
         base_v = glm::vec3(u.y, v.y, w.y);

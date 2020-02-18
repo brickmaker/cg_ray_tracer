@@ -25,6 +25,19 @@ struct Random {
                 sin_theta * glm::sin(phi)
         );
     }
+
+    static glm::vec3 sphere(float_t r, float_t d) {
+        float_t r1 = Random::num();
+        float_t r2 = Random::num();
+        float_t y = 1 + r1 * (glm::sqrt(1. - (r * r) / (d * d)) - 1.);
+        float_t sin_theta = glm::sqrt(1. - y * y);
+        float_t phi = 2 * PI * r2;
+        return glm::vec3(
+                sin_theta * glm::cos(phi),
+                y,
+                sin_theta * glm::sin(phi)
+        );
+    }
 };
 
 
