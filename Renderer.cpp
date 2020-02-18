@@ -5,6 +5,8 @@
 
 #include "Renderer.h"
 #include "Utils.h"
+#include "NormalCoord.h"
+#include "Random.h"
 
 glm::vec3 Renderer::castSphere(Ray ray) {
     float_t x = ray.origin.x;
@@ -44,6 +46,19 @@ glm::vec3 Renderer::cast(Ray ray, int depth = 0) {
             Ray refraction_ray(intersect_info.pos + EPSILON * out_dir, out_dir);
             res = cast(refraction_ray);
         } else {
+            // TODO: fake simulate random cast
+            NormalCoord normal_coord(intersect_info.normal);
+            float_t pdf = 1. / (2. * PI);
+            glm::vec3 accumulate(0);
+            const int ray_num = 5;
+            for (int i = 0; i < ray_num; i++) {
+                glm::vec3 dir = normal_coord.local_to_world(Random::hemi_sphere());
+                Ray new_ray(intersect_info.pos + EPSILON * dir, dir);
+                accumulate += cast(new_ray, depth + 1) / pdf;
+            }
+            glm::vec3 Kd(material.diffuse[0], material.diffuse[1], material.diffuse[2]);
+            res += Kd * accumulate / ray_num;
+            return res;
 
             // diffuse&specular
             for (PointLight &light : lights) {
@@ -66,17 +81,6 @@ glm::vec3 Renderer::cast(Ray ray, int depth = 0) {
 
 //            res *= 0.5; // propotion 0.5
 
-            // TODO: fake simulate random cast
-            glm::vec3 accumulate(0);
-            const int ray_num = 10;
-            for (int i = 0; i < ray_num; i++) {
-                glm::vec3 dir = glm::normalize(Utils::random_in_sphere() + intersect_info.normal);
-                Ray new_ray(intersect_info.pos + EPSILON * dir, dir);
-                accumulate += cast(new_ray, depth + 1);
-            }
-            glm::vec3 Kd(material.diffuse[0], material.diffuse[1], material.diffuse[2]);
-            res += 0.5 * Kd * accumulate / ray_num;
-//            return res;
         }
     }
 
