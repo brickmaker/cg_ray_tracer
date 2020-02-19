@@ -38,7 +38,7 @@ glm::mat4 Camera::get_transform_matrix() {
     return transform_matrix;
 }
 
-Ray Camera::generate_ray(int x, int y) {
+Ray Camera::generate_ray(float_t x, float_t y) {
     glm::vec3 target = transform_matrix * glm::vec4(x, y, 0, 1);
     return {position, glm::normalize(target - position)};
 }

@@ -44,7 +44,7 @@ glm::vec3 Renderer::cast(Ray ray, int depth = 0) {
 
         if (Ka.x > EPSILON) {
             // is light
-            if (depth == 1) {
+            if (depth >= 1) {
                 res = glm::vec3(0);
             } else {
                 res = Ka;
@@ -59,7 +59,11 @@ glm::vec3 Renderer::cast(Ray ray, int depth = 0) {
         } else {
             // diffuse&specular
             if (depth == 0) {
-                for (PointLight &light : lights) {
+#pragma omp parallel for schedule(dynamic)
+                for (int i = 0; i < lights.size(); i++) {
+//                for (PointLight &light : lights) {
+                    PointLight light = lights[i];
+
                     // random sample
                     float_t pdf_inv = get_sphere_pdf_inv(light.pos, light.r, intersect_info.pos);
 //                std::cout << pdf_inv << std::endl;
@@ -68,7 +72,7 @@ glm::vec3 Renderer::cast(Ray ray, int depth = 0) {
 
                     NormalCoord light_normal_coord(glm::normalize(light.pos - intersect_info.pos));
 //                NormalCoord light_normal_coord(light.pos - intersect_info.pos);
-                    const int ray_num = 5;
+                    const int ray_num = 3;
                     glm::vec3 accumulate(0);
                     for (int i = 0; i < ray_num; i++) {
                         glm::vec3 light_dir = -glm::normalize(light_normal_coord.local_to_world(Random::sphere(light.r, dist)));
@@ -123,7 +127,8 @@ glm::vec3 Renderer::cast(Ray ray, int depth = 0) {
             NormalCoord normal_coord(intersect_info.normal);
             float_t pdf = 1. / (2. * PI);
             glm::vec3 accumulate(0);
-            const int ray_num = 50;
+            const int ray_num = 3;
+#pragma omp parallel for schedule(dynamic)
             for (int i = 0; i < ray_num; i++) {
                 glm::vec3 dir = normal_coord.local_to_world(Random::hemi_sphere());
                 Ray new_ray(intersect_info.pos + EPSILON * dir, dir);
@@ -146,19 +151,28 @@ Ray Renderer::ortho_ray_transform(Ray ray, int width, int height) {
 }
 
 buffer_t Renderer::render() {
+    int iteration = 10;
     buffer_t buffer(height, buffer_row_t(width));
+#pragma omp parallel for schedule(dynamic)
     for (int y = 0; y < height; y++) {
+#pragma omp parallel for schedule(dynamic)
         for (int x = 0; x < width; x++) {
 //            Ray ray;
 //            ray.origin = glm::vec3(x, y, 1);
 //            ray.direction = glm::vec3(0, 0, -1);
 //            Ray cast_ray = ortho_ray_transform(ray, width, height);
 //            buffer[height - y - 1][x] = cast(cast_ray);
-            Ray cast_ray = camera.generate_ray(x, y);
+            glm::vec3 accumulate(0);
+#pragma omp parallel for schedule(dynamic)
+            for (int it = 0; it < iteration; it++) {
+                float_t xx = x + Random::num();
+                float_t yy = y + Random::num();
+                Ray cast_ray = camera.generate_ray(xx, yy);
 //            std::cout << cast_ray.direction.x << cast_ray.direction.z << std::endl;
+                accumulate += cast(cast_ray);
+            }
 
-
-            buffer[height - y - 1][x] = cast(cast_ray);
+            buffer[height - y - 1][x] = accumulate / iteration;
         }
         fprintf(stderr, "\r%3d%c", uint32_t((float) (y + 1) / height * 100), '%');
     }

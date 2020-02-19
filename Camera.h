@@ -24,7 +24,7 @@ public:
 
     glm::mat4 get_transform_matrix();
 
-    Ray generate_ray(int x, int y);
+    Ray generate_ray(float_t x, float_t y);
 
 };
 
