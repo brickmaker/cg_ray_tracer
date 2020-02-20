@@ -18,7 +18,7 @@ struct Light {
 struct PointLight {
     const glm::vec3 pos;
     const float_t r;
-    const float_t intensity;
+    const glm::vec3 intensity;
     const std::string material_name;
 };
 

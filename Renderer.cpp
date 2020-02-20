@@ -82,7 +82,7 @@ glm::vec3 Renderer::cast(Ray ray, int depth = 0) {
                         if (mesh.materials[shadow_intersect_info.material_id].name == light.material_name) {
                             // simulate spherical light
 //                        float_t final_intensity = (light.intensity * light.r * light.r) / (glm::length2(intersect_info.pos - light.pos));
-                            float_t final_intensity = light.intensity;
+                            glm::vec3 final_intensity = light.intensity;
                             material = mesh.materials[intersect_info.material_id];
                             glm::vec3 Kd(material.diffuse[0], material.diffuse[1], material.diffuse[2]);
                             glm::vec3 Ks(material.specular[0], material.specular[1], material.specular[2]);
@@ -121,7 +121,7 @@ glm::vec3 Renderer::cast(Ray ray, int depth = 0) {
                 }
             }
 
-            res *= 0.5; // TODO: propotion 0.5
+//            res *= 0.5; // TODO: propotion 0.5
 
             // TODO: fake simulate random cast
             NormalCoord normal_coord(intersect_info.normal);
