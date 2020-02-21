@@ -28,7 +28,7 @@ struct Renderer {
 
     buffer_t render();
 
-    glm::vec3 cast(Ray ray, int depth);
+    glm::vec3 cast(Ray ray, int depth, bool is_sample_light);
 
 //    bool intersect(Ray ray, IntersectInfo &intersectInfo);
 
