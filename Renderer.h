@@ -37,6 +37,8 @@ struct Renderer {
 
     // TODO: test transform
     static Ray ortho_ray_transform(Ray ray, int width, int height);
+
+    glm::vec3 sample_lights(IntersectInfo &intersect_info, Ray &ray, glm::vec3 &Kd, glm::vec3 &Ks, float_t Ns, float_t P);
 };
 
 

@@ -63,7 +63,6 @@ int main() {
     // veach config
     const int width = 768;
     const int height = 512;
-//    Light light(glm::vec3(-1, -1, -3));
     vector<PointLight> point_lights{
             PointLight{glm::vec3(-3.75, 0, 0), 0.03, glm::vec3(901.8, 901.8, 901.8), "mi:light1"},
             PointLight{glm::vec3(-1.25, 0, 0), 0.1, glm::vec3(100, 100, 100), "mi:light2"},

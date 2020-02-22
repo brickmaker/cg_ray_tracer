@@ -28,6 +28,52 @@ glm::vec3 Renderer::castSphere(Ray ray) {
     return glm::vec3(0);
 }
 
+glm::vec3 Renderer::sample_lights(IntersectInfo &intersect_info, Ray &ray, glm::vec3 &Kd, glm::vec3 &Ks, float_t Ns, float_t P = 0.) {
+    // sample on light
+    glm::vec3 light_accumulate(0);
+    for (PointLight &light : lights) {
+
+        // random sample
+        float_t pdf_inv = get_sphere_pdf_inv(light.pos, light.r, intersect_info.pos);
+
+        float_t dist = glm::length(light.pos - intersect_info.pos);
+
+        // TODO: 这个坐标系也有问题，要不要normalize
+        NormalCoord light_normal_coord(glm::normalize(light.pos - intersect_info.pos));
+//        NormalCoord light_normal_coord(light.pos - intersect_info.pos);
+        glm::vec3 light_dir = -light_normal_coord.local_to_world(Random::sphere(light.r, dist));
+        glm::vec3 light_dir_normalized = glm::normalize(light_dir);
+        Ray shadow_ray(intersect_info.pos + EPSILON * -light_dir_normalized, -light_dir_normalized);
+        IntersectInfo shadow_intersect_info{};
+        bool shadow_intersect = tree.intersect(shadow_ray, shadow_intersect_info);
+        if (mesh.materials[shadow_intersect_info.material_id].name == light.material_name) {
+            // simulate spherical light
+//                        float_t final_intensity = (light.intensity * light.r * light.r) / (glm::length2(intersect_info.pos - light.pos));
+            glm::vec3 final_intensity = light.intensity;
+//            float_t light_dist_2 = glm::length2(shadow_intersect_info.pos - intersect_info.pos);
+//            glm::vec3 diffuse = Kd * final_intensity * light_dist_2 * glm::max(glm::dot(-light_dir_normalized, intersect_info.normal), 0.f);
+            glm::vec3 diffuse = Kd * final_intensity * glm::max(glm::dot(-light_dir_normalized, intersect_info.normal), 0.f);
+//                    glm::vec3 diffuse = glm::vec3(0);
+            // Phong
+            glm::vec3 specular = Ks * final_intensity * glm::pow(glm::max(glm::dot(-light_dir, Utils::reflect_direction(intersect_info.normal, ray.direction)), 0.f), Ns);
+            // Bling-Phong
+//            glm::vec3 specular = Ks * final_intensity * glm::pow(glm::max(glm::dot(intersect_info.normal, glm::normalize(-ray.direction - light_dir_normalized)), 0.f), Ns);
+            // TODO: weird equation
+//            glm::vec3 specular = Ks * final_intensity * (Ns + 1) * 0.5f *
+//                                 glm::pow(glm::max(glm::dot(intersect_info.normal, glm::normalize(-ray.direction - light_dir_normalized)), 0.f), Ns);
+//            glm::vec3 specular = glm::vec3(0);
+
+//            float_t area = M_PI * light.r * light.r * (1 - glm::dot(glm::normalize(shadow_intersect_info.pos - light.pos), glm::normalize(intersect_info.pos - light.pos)));
+
+            light_accumulate += (diffuse + specular) * pdf_inv * M_1_PI * (1 - P); // TODO: brdf pdf?
+//            light_accumulate += (diffuse + specular) * pdf_inv * (1 - P) * (1. / area);
+        }
+    }
+
+//            res += light_accumulate;
+    return light_accumulate;
+}
+
 glm::vec3 Renderer::cast(Ray ray, int depth = 0, bool is_sample_light = true) {
     glm::vec3 res(0.);
     if (depth > MAX_DEPTH) {
@@ -59,6 +105,7 @@ glm::vec3 Renderer::cast(Ray ray, int depth = 0, bool is_sample_light = true) {
             return is_sample_light ? Ka : glm::vec3(0);
         } else if (glm::abs(Ni - 1.) > EPSILON) {
             // TODO: not complete
+            std::cerr << "Not implemented!!" << std::endl;
             exit(1);
             // transparent
             bool is_in_dir = glm::dot(ray.direction, intersect_info.normal) < 0; // from out into object
@@ -68,55 +115,38 @@ glm::vec3 Renderer::cast(Ray ray, int depth = 0, bool is_sample_light = true) {
         } else {
             // diffuse&specular
 
-            // sample on light
-            glm::vec3 light_accumulate(0);
-            for (PointLight &light : lights) {
-
-                // random sample
-                float_t pdf_inv = get_sphere_pdf_inv(light.pos, light.r, intersect_info.pos);
-
-                float_t dist = glm::length(light.pos - intersect_info.pos);
-
-                // TODO: 这个坐标系也有问题，要不要normalize
-                NormalCoord light_normal_coord(glm::normalize(light.pos - intersect_info.pos));
-//                NormalCoord light_normal_coord(light.pos - intersect_info.pos);
-                glm::vec3 light_dir = -light_normal_coord.local_to_world(Random::sphere(light.r, dist));
-                glm::vec3 light_dir_normalized = glm::normalize(light_dir);
-                Ray shadow_ray(intersect_info.pos + EPSILON * -light_dir_normalized, -light_dir_normalized);
-                IntersectInfo shadow_intersect_info{};
-                bool shadow_intersect = tree.intersect(shadow_ray, shadow_intersect_info);
-                if (mesh.materials[shadow_intersect_info.material_id].name == light.material_name) {
-                    // simulate spherical light
-//                        float_t final_intensity = (light.intensity * light.r * light.r) / (glm::length2(intersect_info.pos - light.pos));
-                    glm::vec3 final_intensity = light.intensity;
-                    glm::vec3 diffuse = Kd * final_intensity * glm::max(glm::dot(-light_dir_normalized, intersect_info.normal), 0.f);
-//                    glm::vec3 diffuse = glm::vec3(0);
-                    // Phong
-//                        glm::vec3 specular = Ks * final_intensity * glm::pow(glm::max(glm::dot(-light_dir, Utils::reflect_direction(intersect_info.normal, ray.direction)), 0.f), Ns);
-                    // Bling-Phong
-//                    glm::vec3 specular = Ks * final_intensity * glm::pow(glm::max(glm::dot(intersect_info.normal, glm::normalize(-ray.direction - light_dir_normalized)), 0.f), Ns);
-                    // TODO: weird equation
-                    glm::vec3 specular = Ks * final_intensity * (Ns + 1) * 0.5f *
-                                         glm::pow(glm::max(glm::dot(intersect_info.normal, glm::normalize(-ray.direction - light_dir_normalized)), 0.f), Ns);
-//                    glm::vec3 specular = glm::vec3(0);
-
-                    light_accumulate += (diffuse + specular) * pdf_inv * M_1_PI; // TODO: brdf pdf?
-//                    light_accumulate += (diffuse + specular) * pdf_inv;
-                }
-            }
 
             float_t ratio_Ks_Kd = glm::dot(Ks, glm::vec3(1)) / (glm::dot(Ks, glm::vec3(1)) + glm::dot(Kd, glm::vec3(1)));
 
+            russian_roulette = Random::num();
 
-            NormalCoord normal_coord(intersect_info.normal);
-            float_t pdf = 1. / (2. * PI);
-            glm::vec3 dir = normal_coord.local_to_world(Random::hemi_sphere());
-            Ray new_ray(intersect_info.pos + EPSILON * dir, dir);
-            glm::vec3 Kd(material.diffuse[0], material.diffuse[1], material.diffuse[2]);
-//            res += Kd * accumulate / ray_num;
-//            res += Kd * cast(new_ray, depth + 1) / pdf;
-            glm::vec3 next = cast(new_ray, depth + 1, false);
-            res = light_accumulate + Kd * next; // TODO: pdf ?
+            if (russian_roulette < ratio_Ks_Kd) {
+                // Specular
+                glm::vec3 reflect_dir = Utils::reflect_direction(intersect_info.normal, ray.direction);
+                NormalCoord normal_coord(reflect_dir);
+                glm::vec3 dir = normal_coord.local_to_world(Random::specular(Ns));
+                Ray new_ray(intersect_info.pos + EPSILON * dir, dir);
+                glm::vec3 next = cast(new_ray, depth + 1, true);
+                res += 1. / ratio_Ks_Kd * (sample_lights(intersect_info, ray, Kd, Ks, Ns, ratio_Ks_Kd) + Ks * next);
+            } else {
+                // Diffuse
+                float_t max_Kd = glm::max(Kd.x, Kd.y, Kd.z);
+                /*
+                russian_roulette = Random::num();
+                if (russian_roulette < max_Kd) {
+                    Kd /= max_Kd;
+                } else {
+                    return glm::vec3(0);
+                }
+                 */
+                NormalCoord normal_coord(intersect_info.normal);
+                glm::vec3 dir = normal_coord.local_to_world(Random::hemi_sphere());
+                Ray new_ray(intersect_info.pos + EPSILON * dir, dir);
+                glm::vec3 next = cast(new_ray, depth + 1, false);
+                res += 1. / (1. - ratio_Ks_Kd) * (sample_lights(intersect_info, ray, Kd, Ks, Ns, ratio_Ks_Kd) + Kd * next);
+            }
+
+
             return res;
         }
     }
@@ -132,7 +162,7 @@ Ray Renderer::ortho_ray_transform(Ray ray, int width, int height) {
 }
 
 buffer_t Renderer::render() {
-    int spp = 128;
+    int spp = 8;
     buffer_t buffer(height, buffer_row_t(width));
 #pragma omp parallel for schedule(dynamic)
     for (int y = 0; y < height; y++) {
@@ -150,7 +180,7 @@ buffer_t Renderer::render() {
                 float_t yy = y + Random::num();
                 Ray cast_ray = camera.generate_ray(xx, yy);
 //            std::cout << cast_ray.direction.x << cast_ray.direction.z << std::endl;
-                accumulate += cast(cast_ray);
+                accumulate += glm::clamp(cast(cast_ray));
             }
 
             buffer[height - y - 1][x] = accumulate / spp;
