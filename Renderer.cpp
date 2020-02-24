@@ -55,11 +55,13 @@ glm::vec3 Renderer::sample_lights(IntersectInfo &intersect_info, Ray &ray, glm::
             glm::vec3 diffuse = Kd * final_intensity * glm::max(glm::dot(-light_dir_normalized, intersect_info.normal), 0.f);
 //                    glm::vec3 diffuse = glm::vec3(0);
             // Phong
-            glm::vec3 specular = Ks * final_intensity * glm::pow(glm::max(glm::dot(-light_dir, Utils::reflect_direction(intersect_info.normal, ray.direction)), 0.f), Ns);
+//            glm::vec3 specular = Ks * final_intensity * glm::pow(glm::max(glm::dot(-light_dir, Utils::reflect_direction(intersect_info.normal, ray.direction)), 0.f), Ns);
             // Bling-Phong
 //            glm::vec3 specular = Ks * final_intensity * glm::pow(glm::max(glm::dot(intersect_info.normal, glm::normalize(-ray.direction - light_dir_normalized)), 0.f), Ns);
-            // TODO: weird equation
-//            glm::vec3 specular = Ks * final_intensity * (Ns + 1) * 0.5f *
+            // specular
+            glm::vec3 specular = Ks * final_intensity * (Ns + 1) * 0.5f * M_PI *
+                                 glm::pow(glm::max(glm::dot(-light_dir, Utils::reflect_direction(intersect_info.normal, ray.direction)), 0.f), Ns);
+//            glm::vec3 specular = Ks * final_intensity * (Ns + 1) * 0.5f * M_PI *
 //                                 glm::pow(glm::max(glm::dot(intersect_info.normal, glm::normalize(-ray.direction - light_dir_normalized)), 0.f), Ns);
 //            glm::vec3 specular = glm::vec3(0);
 
@@ -142,7 +144,7 @@ glm::vec3 Renderer::cast(Ray ray, int depth = 0, bool is_sample_light = true) {
                 NormalCoord normal_coord(intersect_info.normal);
                 glm::vec3 dir = normal_coord.local_to_world(Random::hemi_sphere());
                 Ray new_ray(intersect_info.pos + EPSILON * dir, dir);
-                glm::vec3 next = cast(new_ray, depth + 1, false);
+                glm::vec3 next = cast(new_ray, depth + 1, true);
                 res += 1. / (1. - ratio_Ks_Kd) * (sample_lights(intersect_info, ray, Kd, Ks, Ns, ratio_Ks_Kd) + Kd * next);
             }
 
@@ -162,7 +164,7 @@ Ray Renderer::ortho_ray_transform(Ray ray, int width, int height) {
 }
 
 buffer_t Renderer::render() {
-    int spp = 8;
+    int spp = 512;
     buffer_t buffer(height, buffer_row_t(width));
 #pragma omp parallel for schedule(dynamic)
     for (int y = 0; y < height; y++) {
@@ -180,7 +182,7 @@ buffer_t Renderer::render() {
                 float_t yy = y + Random::num();
                 Ray cast_ray = camera.generate_ray(xx, yy);
 //            std::cout << cast_ray.direction.x << cast_ray.direction.z << std::endl;
-                accumulate += glm::clamp(cast(cast_ray));
+                accumulate += glm::clamp(glm::sqrt(cast(cast_ray)));
             }
 
             buffer[height - y - 1][x] = accumulate / spp;
