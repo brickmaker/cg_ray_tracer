@@ -164,7 +164,7 @@ Ray Renderer::ortho_ray_transform(Ray ray, int width, int height) {
 }
 
 buffer_t Renderer::render() {
-    int spp = 1;
+    int spp = 512;
     buffer_t buffer(height, buffer_row_t(width));
 #pragma omp parallel for schedule(dynamic)
     for (int y = 0; y < height; y++) {

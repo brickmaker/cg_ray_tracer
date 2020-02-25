@@ -56,8 +56,8 @@ int main() {
 
 #if DINNING
     // dinning room config
-//    std::string infile = "models/diningroom/diningroom.obj";
-    std::string infile = "models/diningroom-simple/diningroom-simple.obj";
+    std::string infile = "models/diningroom/diningroom.obj";
+//    std::string infile = "models/diningroom-simple/diningroom-simple.obj";
     const int width = 1280;
     const int height = 720;
     vector<PointLight> point_lights{
