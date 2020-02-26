@@ -19,12 +19,14 @@
 struct Renderer {
     Mesh &mesh;
     KDTree &tree;
-    vector<PointLight> lights;
+    vector<Light *> lights;
     Camera camera;
     const int width;
     const int height;
 
-    Renderer(Mesh &mesh, KDTree &tree, vector<PointLight> &lights, Camera &camera, int width, int height);
+    Renderer(Mesh &mesh, KDTree &tree, vector<Light *> &lights, Camera &camera, int width, int height);
+
+    ~Renderer();
 
     buffer_t render();
 

@@ -31,6 +31,12 @@ glm::vec3 Renderer::castSphere(Ray ray) {
 glm::vec3 Renderer::sample_lights(IntersectInfo &intersect_info, Ray &ray, glm::vec3 &Kd, glm::vec3 &Ks, float_t Ns, float_t P = 0.) {
     // sample on light
     glm::vec3 light_accumulate(0);
+    for (Light *light : lights) {
+        light_accumulate += light->sample(mesh, tree, intersect_info.pos, intersect_info.normal, ray.direction, Kd, Ks, Ns, P);
+    }
+    return light_accumulate;
+
+    /*
     for (PointLight &light : lights) {
 
         // random sample
@@ -74,6 +80,7 @@ glm::vec3 Renderer::sample_lights(IntersectInfo &intersect_info, Ray &ray, glm::
 
 //            res += light_accumulate;
     return light_accumulate;
+     */
 }
 
 glm::vec3 Renderer::cast(Ray ray, int depth = 0, bool is_sample_light = true) {
@@ -192,6 +199,12 @@ buffer_t Renderer::render() {
     return buffer;
 }
 
-Renderer::Renderer(Mesh &mesh, KDTree &tree, vector<PointLight> &lights, Camera &camera, int width, int height) : mesh(mesh), tree(tree), lights(lights), camera(camera), width(width),
-                                                                                                                  height(height) {}
+Renderer::~Renderer() {
+    for (Light *light : lights) {
+        delete (light);
+    }
+}
+
+Renderer::Renderer(Mesh &mesh, KDTree &tree, vector<Light *> &lights, Camera &camera, int width, int height) : mesh(mesh), tree(tree), lights(lights), camera(camera), width(width),
+                                                                                                               height(height) {}
 

@@ -30,9 +30,11 @@ struct Light {
             const glm::vec3 &ray_in_direction,
             const glm::vec3 &Kd,
             const glm::vec3 &Ks,
-            const float_t &Ns,
-            const float_t &P // TODO: P usage
+            float_t Ns,
+            float_t P // TODO: P usage
     ) = 0;
+
+    virtual ~Light() {};
 };
 
 
@@ -42,7 +44,7 @@ struct DistantLight {
     explicit DistantLight(glm::vec3 direction) : direction(glm::normalize(direction)) {}
 };
 
-struct SquareLight : Light {
+struct SquareLight : public Light {
     const glm::vec3 pos1;
     const glm::vec3 pos2;
     const glm::vec3 pos3;
@@ -82,12 +84,13 @@ struct SquareLight : Light {
            const glm::vec3 &ray_in_direction,
            const glm::vec3 &Kd,
            const glm::vec3 &Ks,
-           const float_t &Ns,
-           const float_t &P) override {
+           float_t Ns,
+           float_t P) override {
         float_t eps1 = Random::num();
         float_t eps2 = Random::num();
-        glm::vec3 target = pos1 + eps1 * u_axis + eps2 * v_axis;
+        glm::vec3 target = pos1 + eps1 * width * u_axis + eps2 * height * v_axis;
 
+        float_t dist = glm::distance(target, hit_pos);
         glm::vec3 light_dir = -glm::normalize(target - hit_pos);
         Ray shadow_ray(hit_pos + EPSILON * -light_dir, -light_dir);
         IntersectInfo shadow_intersect_info{};
@@ -105,22 +108,28 @@ struct SquareLight : Light {
 //            glm::vec3 specular = glm::vec3(0);
 
             // TODO: both side square light
-            float_t pdf_inv = area * glm::abs(glm::dot(normal, light_dir));
+            float_t pdf_inv = area * glm::abs(glm::dot(normal, light_dir)) / (dist * dist);
+//            float_t pdf_inv = 1.f;
 
+//            return (diffuse + specular) * pdf_inv * (float_t) M_1_PI * (1 - P);
             return (diffuse + specular) * pdf_inv * (float_t) M_1_PI * (1 - P);
         }
 
         return glm::vec3(0);
     }
+
+    ~SquareLight() {
+
+    }
 };
 
-struct PointLight : Light {
+struct PointLight : public Light {
     const glm::vec3 pos;
     const float_t r;
 
     PointLight(
             const glm::vec3 &pos,
-            const float_t &r,
+            const float_t r,
             const glm::vec3 &intensity,
             const std::string &material_name
     ) : Light(intensity, material_name),
@@ -135,8 +144,8 @@ struct PointLight : Light {
             const glm::vec3 &ray_in_direction,
             const glm::vec3 &Kd,
             const glm::vec3 &Ks,
-            const float_t &Ns,
-            const float_t &P) override {
+            float_t Ns,
+            float_t P) override {
 
         float_t dist = glm::distance(pos, hit_pos);
         float_t cos_theta_max = glm::sqrt(1. - (r * r) / (dist * dist));
@@ -165,6 +174,10 @@ struct PointLight : Light {
 
         return glm::vec3(0);
     };
+
+    ~PointLight() {
+
+    }
 
 };
 
