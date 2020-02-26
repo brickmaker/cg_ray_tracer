@@ -155,7 +155,7 @@ TreeNode *KDTree::build_tree(int shape_i, int l, int r, int axis) {
     return root;
 }
 
-TriangleItem *KDTree::search(Ray &ray, TreeNode *root, float_t &dist, glm::vec2 &bary_pos) {
+TriangleItem *KDTree::search(Ray &ray, TreeNode *root, float_t &dist, glm::vec2 &bary_pos) const {
     if (!root) {
         return nullptr;
     }
@@ -206,7 +206,7 @@ TriangleItem *KDTree::search(Ray &ray, TreeNode *root, float_t &dist, glm::vec2 
     return res;
 }
 
-bool KDTree::intersect(Ray &ray, IntersectInfo &intersect_info) {
+bool KDTree::intersect(Ray &ray, IntersectInfo &intersect_info) const {
 //        return intersect_naive(ray, intersect_info);
     float_t dist = FLOAT_INF;
     glm::vec2 bary_pos;

@@ -64,9 +64,9 @@ struct KDTree {
 
     TreeNode *build_tree(int shape_i, int l, int r, int axis);
 
-    TriangleItem *search(Ray &ray, TreeNode *root, float_t &dist, glm::vec2 &bary_pos);
+    TriangleItem *search(Ray &ray, TreeNode *root, float_t &dist, glm::vec2 &bary_pos) const;
 
-    bool intersect(Ray &ray, IntersectInfo &intersect_info);
+    bool intersect(Ray &ray, IntersectInfo &intersect_info) const;
 
     bool intersect_naive(Ray &ray, IntersectInfo &intersect_info);
 };
