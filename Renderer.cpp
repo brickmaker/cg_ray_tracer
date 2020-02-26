@@ -113,6 +113,7 @@ glm::vec3 Renderer::cast(Ray ray, int depth = 0, bool is_sample_light = true) {
             // is light
             return is_sample_light ? Ka : glm::vec3(0);
         } else if (glm::abs(Ni - 1.) > EPSILON) {
+//            return glm::vec3(1, 0, 0);
             // TODO: not complete
 //            std::cerr << "Not implemented!!" << std::endl;
 //            exit(1);
@@ -171,7 +172,7 @@ Ray Renderer::ortho_ray_transform(Ray ray, int width, int height) {
 }
 
 buffer_t Renderer::render() {
-    int spp = 4;
+    int spp = 8;
     buffer_t buffer(height, buffer_row_t(width));
 #pragma omp parallel for schedule(dynamic)
     for (int y = 0; y < height; y++) {
