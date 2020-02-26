@@ -11,15 +11,12 @@
 #include "Light.h"
 #include "KDTree.h"
 
-#define CBOX 0
+#define CBOX 1
 #define DINNING 0
-#define MIS 1
+#define MIS 0
 
 
 int main() {
-//    const int height = 720;
-//    const int width = 1280;
-
 //    std::string infile = "models/spot.obj";
 //    std::string infile = "models/box/box.obj";
 //    std::string infile = "models/cornelbox/cornell-box.obj";
@@ -46,13 +43,16 @@ int main() {
 //    Light light(glm::vec3(-1, -1, -1));
 //    Camera camera(glm::vec3(0.5, 0., 2.5), glm::vec3(0., 0., 0.), glm::vec3(0., 1., 0.), 60, glm::vec2(width, height));
 
+#if CBOX
     // cbox config
-//    const int width = 512;
-//    const int height = 512;
-//    vector<PointLight> point_lights;
-//    Light light(glm::vec3(0, 0, 1));
-//    vector<PointLight> point_lights{PointLight{glm::vec3(150, 225, 130), 80, 10, "cbox:light"}};
-//    Camera camera(glm::vec3(278, 273, -800), glm::vec3(278, 273, -799), glm::vec3(0., 1., 0.), 39.3077, glm::vec2(width, height));
+//    std::string infile = "models/cbox/cbox.obj";
+    std::string infile = "models/cbox-simple/cbox.obj";
+    const int width = 512;
+    const int height = 512;
+//    vector<PointLight> point_lights{PointLight{glm::vec3(278, 273, 0), 80, glm::vec3(10), "cbox:light"}};
+    vector<PointLight> point_lights;
+    Camera camera(glm::vec3(278, 273, -800), glm::vec3(278, 273, -799), glm::vec3(0., 1., 0.), 39.3077, glm::vec2(width, height));
+#endif
 
 #if DINNING
     // dinning room config

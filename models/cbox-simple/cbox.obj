@@ -575,6 +575,7 @@ v 213 548.79998779296875 227
 
 o cbox:cbox_ceiling_mesh
 usemtl cbox:white
+#usemtl cbox:light
 f 127//121 126//121 125//121 128//121
 f 132//120 131//120 130//120 129//120
 
@@ -586,6 +587,7 @@ v 0 0 0
 
 o cbox:cbox_floor_mesh
 usemtl cbox:white
+#usemtl cbox:light
 f 133//120 134//120 124//120 123//120
 
 # 0 vertex

@@ -18,6 +18,9 @@ private:
     glm::vec3 up_direction;
     float_t fov;
     glm::vec2 resolution;
+    glm::vec3 origin;
+    glm::vec3 x_axis;
+    glm::vec3 y_axis;
 
 public:
     Camera(glm::vec3 position, glm::vec3 look_at, glm::vec3 up_direction, float_t fov, glm::vec2 resolution);

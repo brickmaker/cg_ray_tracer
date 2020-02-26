@@ -11,6 +11,14 @@ Camera::Camera(glm::vec3 position, glm::vec3 look_at, glm::vec3 up_direction, fl
         up_direction(up_direction),
         fov(fov),
         resolution(resolution) {
+
+    glm::vec3 dir = glm::normalize(look_at - position);
+
+    x_axis = glm::cross(dir, up_direction);
+    y_axis = glm::cross(x_axis, dir);
+    origin = position + dir * (resolution.y / 2.f) / glm::tan(glm::radians(fov / 2.f));
+
+    /*
     // TODO: not consider up direction
 
     glm::vec3 pos_z(0, 0, 1);
@@ -32,6 +40,7 @@ Camera::Camera(glm::vec3 position, glm::vec3 look_at, glm::vec3 up_direction, fl
     glm::mat4 translate3 = glm::translate(position);
 
     transform_matrix = translate3 * rotate * translate2 * translate1;
+     */
 }
 
 glm::mat4 Camera::get_transform_matrix() {
@@ -39,6 +48,10 @@ glm::mat4 Camera::get_transform_matrix() {
 }
 
 Ray Camera::generate_ray(float_t x, float_t y) {
+    /*
     glm::vec3 target = transform_matrix * glm::vec4(x, y, 0, 1);
+    return {position, glm::normalize(target - position)};
+     */
+    glm::vec3 target = origin + (x - resolution.x / 2.f) * x_axis + (y - resolution.y / 2) * y_axis;
     return {position, glm::normalize(target - position)};
 }

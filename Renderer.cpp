@@ -107,8 +107,8 @@ glm::vec3 Renderer::cast(Ray ray, int depth = 0, bool is_sample_light = true) {
             return is_sample_light ? Ka : glm::vec3(0);
         } else if (glm::abs(Ni - 1.) > EPSILON) {
             // TODO: not complete
-            std::cerr << "Not implemented!!" << std::endl;
-            exit(1);
+//            std::cerr << "Not implemented!!" << std::endl;
+//            exit(1);
             // transparent
             bool is_in_dir = glm::dot(ray.direction, intersect_info.normal) < 0; // from out into object
             glm::vec3 out_dir = Utils::refract_direction(intersect_info.normal, ray.direction, Ni);
