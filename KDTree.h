@@ -68,7 +68,7 @@ struct KDTree {
 
     bool intersect(Ray &ray, IntersectInfo &intersect_info) const;
 
-    bool intersect_naive(Ray &ray, IntersectInfo &intersect_info);
+    bool intersect_naive(Ray &ray, IntersectInfo &intersect_info) const;
 };
 
 

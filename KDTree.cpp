@@ -207,7 +207,7 @@ TriangleItem *KDTree::search(Ray &ray, TreeNode *root, float_t &dist, glm::vec2 
 }
 
 bool KDTree::intersect(Ray &ray, IntersectInfo &intersect_info) const {
-//        return intersect_naive(ray, intersect_info);
+//    return intersect_naive(ray, intersect_info);
     float_t dist = FLOAT_INF;
     glm::vec2 bary_pos;
     TriangleItem *intersect_item = nullptr;
@@ -219,17 +219,24 @@ bool KDTree::intersect(Ray &ray, IntersectInfo &intersect_info) const {
             intersect_info.shape_i = i;
         }
     }
+
+
     if (intersect_item) {
+//        std::vector<glm::vec3> vertices{intersect_item->vertices[0], intersect_item->vertices[1], intersect_item->vertices[2]};
+//        glm::vec3 normal = glm::cross(vertices[1] - vertices[0], vertices[2] - vertices[0]);
+//        normal = glm::normalize(normal);
+
         intersect_info.face_i = intersect_item->face_i;
         intersect_info.material_id = mesh.shapes[intersect_info.shape_i].mesh.material_ids[intersect_info.face_i];
         intersect_info.pos = ray.origin + dist * ray.direction;
         intersect_info.normal = (1 - bary_pos.x - bary_pos.y) * intersect_item->normals[0] + bary_pos.x * intersect_item->normals[1] + bary_pos.y * intersect_item->normals[2];
+//        intersect_info.normal = normal;
         return true;
     }
     return false;
 }
 
-bool KDTree::intersect_naive(Ray &ray, IntersectInfo &intersect_info) {
+bool KDTree::intersect_naive(Ray &ray, IntersectInfo &intersect_info) const {
 
     bool flag_intersect = false;
     float_t near_dist = FLOAT_INF; // record nearest distance

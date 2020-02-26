@@ -45,8 +45,9 @@ int main() {
 
 #if CBOX
     // cbox config
-    std::string infile = "models/cbox/cbox.obj";
+//    std::string infile = "models/cbox/cbox.obj";
 //    std::string infile = "models/cbox-simple/cbox.obj";
+    std::string infile = "models/cbox-simple/cbox-simple.obj";
     const int width = 512;
     const int height = 512;
     vector<Light *> lights{
