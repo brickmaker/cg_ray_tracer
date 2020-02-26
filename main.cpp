@@ -12,8 +12,8 @@
 #include "KDTree.h"
 
 #define CBOX 0
-#define DINNING 1
-#define MIS 0
+#define DINNING 0
+#define MIS 1
 
 
 int main() {
@@ -67,17 +67,20 @@ int main() {
     Camera camera(glm::vec3(-0.5, 3, 5.5), glm::vec3(-0.5, 2, 0), glm::vec3(0., 1., 0.), 35.983f, glm::vec2(width, height));
 #endif
 
+#if MIS
     // veach config
-//    const int width = 768;
-//    const int height = 512;
-//    vector<PointLight> point_lights{
-//            PointLight{glm::vec3(-3.75, 0, 0), 0.03, glm::vec3(901.8, 901.8, 901.8), "mi:light1"},
-//            PointLight{glm::vec3(-1.25, 0, 0), 0.1, glm::vec3(100, 100, 100), "mi:light2"},
-//            PointLight{glm::vec3(1.25, 0, 0), 0.3, glm::vec3(11.11, 11.11, 11.11), "mi:light3"},
-//            PointLight{glm::vec3(3.75, 0, 0), 0.9, glm::vec3(1.24, 1.24, 1.24), "mi:light4"},
-//            PointLight{glm::vec3(10, 10, 4), 0.5, glm::vec3(800, 800, 800), "mi:light5"},
-//    };
-//    Camera camera(glm::vec3(0, 2, 15), glm::vec3(0, -2, 2.5), glm::vec3(0., 1., 0.), 28, glm::vec2(width, height));
+    std::string infile = "models/veach_mis/mis.obj";
+    const int width = 768;
+    const int height = 512;
+    vector<PointLight> point_lights{
+            PointLight{glm::vec3(-3.75, 0, 0), 0.03, glm::vec3(901.8, 901.8, 901.8), "mi:light1"},
+            PointLight{glm::vec3(-1.25, 0, 0), 0.1, glm::vec3(100, 100, 100), "mi:light2"},
+            PointLight{glm::vec3(1.25, 0, 0), 0.3, glm::vec3(11.11, 11.11, 11.11), "mi:light3"},
+            PointLight{glm::vec3(3.75, 0, 0), 0.9, glm::vec3(1.24, 1.24, 1.24), "mi:light4"},
+            PointLight{glm::vec3(10, 10, 4), 0.5, glm::vec3(800, 800, 800), "mi:light5"},
+    };
+    Camera camera(glm::vec3(0, 2, 15), glm::vec3(0, -2, 2.5), glm::vec3(0., 1., 0.), 28, glm::vec2(width, height));
+#endif
 
     Mesh mesh(infile);
     KDTree tree(mesh);
