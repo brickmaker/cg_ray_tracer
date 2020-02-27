@@ -123,3 +123,24 @@ glm::vec3 Utils::random_in_sphere() {
 float_t Utils::rand() {
     return (float_t) std::rand() / RAND_MAX;
 }
+
+glm::vec3 Utils::get_barycoord(glm::vec3 &p, glm::vec3 &a, glm::vec3 &b, glm::vec3 &c) {
+    glm::vec3 v0 = c - a;
+    glm::vec3 v1 = b - a;
+    glm::vec3 v2 = p - a;
+    float_t d00 = glm::dot(v0, v0);
+    float_t d01 = glm::dot(v0, v1);
+    float_t d02 = glm::dot(v0, v2);
+    float_t d11 = glm::dot(v1, v1);
+    float_t d12 = glm::dot(v1, v2);
+    float_t denom = d00 * d11 - d01 * d01;
+
+    if (denom == 0) {
+        return glm::vec3(0);
+    }
+
+    float_t u = 1. / denom * (d11 * d02 - d01 * d12);
+    float_t v = 1. / denom * (d00 * d12 - d01 * d02);
+
+    return glm::vec3(1 - u - v, v, u);
+}

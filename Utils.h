@@ -17,6 +17,8 @@ struct Utils {
     static glm::vec3 random_in_sphere();
     static float_t rand();
 
+    static glm::vec3 get_barycoord(glm::vec3 &p, glm::vec3 &a, glm::vec3 &b, glm::vec3 &c);
+
     static buffer_t show_vertices(Mesh &mesh, int width, int height);
 };
 

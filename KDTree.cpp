@@ -3,6 +3,7 @@
 //
 
 #include "KDTree.h"
+#include "Utils.h"
 
 
 static BBox operator+(BBox &a, BBox &b) {
@@ -229,8 +230,23 @@ bool KDTree::intersect(Ray &ray, IntersectInfo &intersect_info) const {
         intersect_info.face_i = intersect_item->face_i;
         intersect_info.material_id = mesh.shapes[intersect_info.shape_i].mesh.material_ids[intersect_info.face_i];
         intersect_info.pos = ray.origin + dist * ray.direction;
-        intersect_info.normal = (1 - bary_pos.x - bary_pos.y) * intersect_item->normals[0] + bary_pos.x * intersect_item->normals[1] + bary_pos.y * intersect_item->normals[2];
+
+        /*
+        glm::vec3 manual_bary_pos = Utils::get_barycoord(
+                intersect_info.pos,
+                intersect_item->vertices[0],
+                intersect_item->vertices[1],
+                intersect_item->vertices[2]
+        );
+
+        intersect_info.normal = manual_bary_pos.x * intersect_item->normals[0] +
+                                manual_bary_pos.y * intersect_item->normals[1] +
+                                manual_bary_pos.z * intersect_item->normals[2];
+         */
+
 //        intersect_info.normal = normal;
+
+        intersect_info.normal = (1 - bary_pos.x - bary_pos.y) * intersect_item->normals[0] + bary_pos.x * intersect_item->normals[1] + bary_pos.y * intersect_item->normals[2];
         return true;
     }
     return false;
