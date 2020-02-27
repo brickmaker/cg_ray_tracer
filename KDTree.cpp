@@ -242,7 +242,7 @@ bool KDTree::intersect(Ray &ray, IntersectInfo &intersect_info) const {
         intersect_info.normal = manual_bary_pos.x * intersect_item->normals[0] +
                                 manual_bary_pos.y * intersect_item->normals[1] +
                                 manual_bary_pos.z * intersect_item->normals[2];
-         */
+        */
 
 //        intersect_info.normal = normal;
 

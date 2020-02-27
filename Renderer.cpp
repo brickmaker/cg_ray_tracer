@@ -98,6 +98,20 @@ glm::vec3 Renderer::cast(Ray ray, int depth = 0, bool is_sample_light = true) {
         float_t Ns = material.shininess;
         glm::vec3 refraction(0);
 
+        /*
+        cout << material.name << "\n";
+        cout << "pos:("
+             << intersect_info.pos.x << "," <<
+             intersect_info.pos.y << "," <<
+             intersect_info.pos.z << ")\n";
+        cout << "normal:("
+             << intersect_info.normal.x << "," <<
+             intersect_info.normal.y << "," <<
+             intersect_info.normal.z << ")\n";
+
+//        return glm::vec3(1.) * glm::dot(intersect_info.normal, -ray.direction);
+         */
+
         float_t russian_roulette = Random::num();
 
         /*
@@ -113,7 +127,7 @@ glm::vec3 Renderer::cast(Ray ray, int depth = 0, bool is_sample_light = true) {
             // is light
             return is_sample_light ? Ka : glm::vec3(0);
         } else if (glm::abs(Ni - 1.) > EPSILON) {
-//            return glm::vec3(1, 0, 0);
+            return glm::vec3(0, 0, 0);
             // TODO: not complete
 //            std::cerr << "Not implemented!!" << std::endl;
 //            exit(1);
@@ -172,12 +186,16 @@ Ray Renderer::ortho_ray_transform(Ray ray, int width, int height) {
 }
 
 buffer_t Renderer::render() {
-    int spp = 8;
+    int spp = 128;
     buffer_t buffer(height, buffer_row_t(width));
 #pragma omp parallel for schedule(dynamic)
     for (int y = 0; y < height; y++) {
 #pragma omp parallel for schedule(dynamic)
         for (int x = 0; x < width; x++) {
+//            if (y != (512 - 300) or x < 180 or x > 190)
+//            if (y != (512 - 300) || x < 50 || x > 70)
+//                continue;
+//            std::cout << "(" << x << ", " << y << ")\n";
 //            Ray ray;
 //            ray.origin = glm::vec3(x, y, 1);
 //            ray.direction = glm::vec3(0, 0, -1);
@@ -186,8 +204,8 @@ buffer_t Renderer::render() {
             glm::vec3 accumulate(0);
 #pragma omp parallel for schedule(dynamic)
             for (int it = 0; it < spp; it++) {
-                float_t xx = x + Random::num();
-                float_t yy = y + Random::num();
+                float_t xx = x + (spp == 1 ? 0.5 : Random::num());
+                float_t yy = y + (spp == 1 ? 0.5 : Random::num());
                 Ray cast_ray = camera.generate_ray(xx, yy);
 //            std::cout << cast_ray.direction.x << cast_ray.direction.z << std::endl;
                 accumulate += glm::clamp(glm::sqrt(cast(cast_ray)));
