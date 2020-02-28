@@ -2,6 +2,7 @@
 // Created by Xiaodong Zhao on 2020/2/12.
 //
 
+#include <algorithm>
 #include "KDTree.h"
 #include "Utils.h"
 
