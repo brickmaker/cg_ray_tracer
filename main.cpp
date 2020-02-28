@@ -11,9 +11,10 @@
 #include "Light.h"
 #include "KDTree.h"
 
-#define CBOX 1
+#define CBOX 0
 #define DINNING 0
 #define MIS 0
+#define ROOM 1
 
 
 int main() {
@@ -103,6 +104,16 @@ int main() {
     };
 */
     Camera camera(glm::vec3(0, 2, 15), glm::vec3(0, -2, 2.5), glm::vec3(0., 1., 0.), 28, glm::vec2(width, height));
+#endif
+
+#if ROOM
+    std::string infile = "models/room/room.obj";
+    const int width = 512;
+    const int height = 512;
+    vector<Light *> lights{
+            new PointLight{glm::vec3(0, 1.589, -1.274), 0.2, glm::vec3(50, 50, 40), "light"}
+    };
+    Camera camera(glm::vec3(0, 0, 4), glm::vec3(0, 0, 0), glm::vec3(0., 1., 0.), 50, glm::vec2(width, height));
 #endif
 
     Mesh mesh(infile);
