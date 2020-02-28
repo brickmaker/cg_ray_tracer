@@ -67,7 +67,7 @@ buffer_t Utils::show_vertices(Mesh &mesh, int width, int height) {
                 glm::vec4 vv = vp_matrix * vertex;
                 glm::vec2 pos = test_transform(glm::vec2(vv.x, vv.y), width, height);
 //                std::cout << pos.x << " " << pos.y << std::endl;
-                if (pos.x >= 0 and pos.x < width and pos.y > 0 and pos.y <= height) {
+                if (pos.x >= 0 && pos.x < width && pos.y > 0 && pos.y <= height) {
                     buffer[height - pos.y][pos.x] = glm::vec3(1);
                 }
                 float_t nx = mesh.attrib.normals[3 * idx.normal_index + 0];

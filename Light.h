@@ -5,6 +5,9 @@
 #ifndef CG_RAY_TRACER_LIGHT_H
 #define CG_RAY_TRACER_LIGHT_H
 
+#define _USE_MATH_DEFINES // for windows
+#include <cmath>
+
 #include <string>
 #include "libs/glm/vec3.hpp"
 #include "libs/glm/ext.hpp"
