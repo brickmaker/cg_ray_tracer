@@ -144,3 +144,24 @@ glm::vec3 Utils::get_barycoord(glm::vec3 &p, glm::vec3 &a, glm::vec3 &b, glm::ve
 
     return glm::vec3(1 - u - v, v, u);
 }
+
+float_t Utils::fresnel(glm::vec3 &normal, glm::vec3 &in_direction, float_t n) { // return reflection ratio
+    float_t cos1_val = glm::clamp(glm::dot(normal, in_direction), -1.f, 1.f);
+    float_t eta1 = 1., eta2 = n;
+    if (cos1_val > 0) {
+        std::swap(eta1, eta2);
+    } else {
+        cos1_val = -cos1_val;
+    }
+
+    float_t sin2_val = (eta1 / eta2) * glm::sqrt(glm::max(0.f, 1 - cos1_val * cos1_val));
+
+    if (sin2_val >= 1) { // 全反射
+        return 1.;
+    }
+
+    float_t cos2_val = glm::sqrt(glm::max(0.f, 1 - sin2_val * sin2_val));
+    float Rs = ((eta2 * cos1_val) - (eta1 * cos2_val)) / ((eta2 * cos1_val) + (eta1 * cos2_val));
+    float Rp = ((eta1 * cos1_val) - (eta2 * cos2_val)) / ((eta1 * cos1_val) + (eta2 * cos2_val));
+    return (Rs * Rs + Rp * Rp) / 2;
+}

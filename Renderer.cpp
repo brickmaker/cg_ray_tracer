@@ -127,15 +127,30 @@ glm::vec3 Renderer::cast(Ray ray, int depth = 0, bool is_sample_light = true) {
             // is light
             return is_sample_light ? Ka : glm::vec3(0);
         } else if (glm::abs(Ni - 1.) > EPSILON) {
-            return glm::vec3(0, 0, 0);
-            // TODO: not complete
-//            std::cerr << "Not implemented!!" << std::endl;
-//            exit(1);
+//            return glm::vec3(0, 0, 0);
             // transparent
-            bool is_in_dir = glm::dot(ray.direction, intersect_info.normal) < 0; // from out into object
-            glm::vec3 out_dir = Utils::refract_direction(intersect_info.normal, ray.direction, Ni);
-            Ray refraction_ray(intersect_info.pos + EPSILON * out_dir, out_dir);
-            res = cast(refraction_ray);
+
+            float_t reflect_ratio = Utils::fresnel(intersect_info.normal, ray.direction, Ni);
+
+            glm::vec3 res_refract(0);
+            glm::vec3 res_reflect(0);
+
+            if (reflect_ratio < 1.) {
+                glm::vec3 refract_dir = Utils::refract_direction(intersect_info.normal, ray.direction, Ni);
+                Ray refraction_ray(intersect_info.pos + EPSILON * refract_dir, refract_dir);
+                res_refract = cast(refraction_ray, depth + 1);
+            }
+
+            glm::vec3 reflect_dir = Utils::reflect_direction(intersect_info.normal, ray.direction);
+            Ray reflection_ray(intersect_info.pos + EPSILON * reflect_dir, reflect_dir);
+            res_reflect = cast(reflection_ray, depth + 1);
+
+//            std::cout << reflect_ratio << std::endl;
+
+            res = reflect_ratio * res_reflect + (1 - reflect_ratio) * res_refract;
+
+            return res;
+
         } else {
             // diffuse&specular
 
