@@ -4,9 +4,9 @@
 
 
 #include "Renderer.h"
-#include "Utils.h"
-#include "NormalCoord.h"
-#include "Random.h"
+#include "../utils/Utils.h"
+#include "../utils/NormalCoord.h"
+#include "../utils/Random.h"
 
 float_t get_sphere_pdf_inv(glm::vec3 origin, float_t r, glm::vec3 pos) {
     float_t cos_theta = glm::sqrt(1. - (r * r) / (glm::dot(origin - pos, origin - pos)));

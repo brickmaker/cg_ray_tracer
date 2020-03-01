@@ -4,7 +4,7 @@
 
 #include <algorithm>
 #include "KDTree.h"
-#include "Utils.h"
+#include "../utils/Utils.h"
 
 
 static BBox operator+(BBox &a, BBox &b) {

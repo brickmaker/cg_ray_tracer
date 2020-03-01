@@ -7,7 +7,7 @@
 
 #include <fstream>
 #include "defs.h"
-#include "Mesh.h"
+#include "../mesh/Mesh.h"
 
 struct Utils {
     static void save_img(buffer_t buffer, const std::string &path);

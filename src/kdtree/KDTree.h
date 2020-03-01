@@ -8,9 +8,9 @@
 #define GLM_ENABLE_EXPERIMENTAL
 
 #include <iostream>
-#include "defs.h"
-#include "Mesh.h"
-#include "../libs/glm/ext.hpp"
+#include "../utils/defs.h"
+#include "../mesh/Mesh.h"
+#include "../../libs/glm/ext.hpp"
 
 const int LEAF_TRIANGLE_CNT = 5;
 

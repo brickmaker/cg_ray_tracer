@@ -3,7 +3,7 @@
 //
 
 #include "Utils.h"
-#include "../libs/glm/gtx/norm.hpp"
+#include "../../libs/glm/gtx/norm.hpp"
 
 void Utils::save_img(buffer_t buffer, const std::string &path) {
     const int height = buffer.size();

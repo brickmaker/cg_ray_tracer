@@ -5,9 +5,9 @@
 #ifndef CG_RAY_TRACER_CAMERA_H
 #define CG_RAY_TRACER_CAMERA_H
 
-#include "../libs/glm/glm.hpp"
-#include "../libs/glm/gtx/transform.hpp"
-#include "defs.h"
+#include "../../libs/glm/glm.hpp"
+#include "../../libs/glm/gtx/transform.hpp"
+#include "../utils/defs.h"
 
 
 class Camera {

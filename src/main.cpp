@@ -3,13 +3,13 @@
 #define TINYOBJLOADER_IMPLEMENTATION // define this in only *one* .cc
 #define GLM_ENABLE_EXPERIMENTAL
 
-#include "Renderer.h"
+#include "renderer/Renderer.h"
 
-#include "defs.h"
-#include "Utils.h"
-#include "Mesh.h"
-#include "Light.h"
-#include "KDTree.h"
+#include "utils/defs.h"
+#include "utils/Utils.h"
+#include "mesh/Mesh.h"
+#include "light/Light.h"
+#include "kdtree/KDTree.h"
 
 
 int main() {

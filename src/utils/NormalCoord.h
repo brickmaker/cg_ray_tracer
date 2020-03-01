@@ -7,7 +7,7 @@
 
 
 #include <iostream>
-#include "../libs/glm/glm.hpp"
+#include "../../libs/glm/glm.hpp"
 #include "defs.h"
 
 struct NormalCoord {

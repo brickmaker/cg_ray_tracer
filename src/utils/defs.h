@@ -8,10 +8,10 @@
 
 #include <vector>
 
-#include "../libs/glm/glm.hpp"
-#include "../libs/glm/ext.hpp"
+#include "../../libs/glm/glm.hpp"
+#include "../../libs/glm/ext.hpp"
 
-#include "configs.h"
+#include "../configs.h"
 
 typedef float float_t;
 

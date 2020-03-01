@@ -9,14 +9,14 @@
 #include <cmath>
 
 #include <string>
-#include "../libs/glm/vec3.hpp"
-#include "../libs/glm/ext.hpp"
-#include "../libs/glm/gtx/norm.hpp"
-#include "NormalCoord.h"
-#include "Random.h"
-#include "Mesh.h"
-#include "KDTree.h"
-#include "Utils.h"
+#include "../../libs/glm/vec3.hpp"
+#include "../../libs/glm/ext.hpp"
+#include "../../libs/glm/gtx/norm.hpp"
+#include "../utils/NormalCoord.h"
+#include "../utils/Random.h"
+#include "../mesh/Mesh.h"
+#include "../kdtree/KDTree.h"
+#include "../utils/Utils.h"
 
 struct Light {
     const glm::vec3 intensity;

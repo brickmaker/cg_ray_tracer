@@ -27,6 +27,6 @@ find_package(OpenMP REQUIRED)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(cg_ray_tracer libs/glm/gtx/intersect.hpp src/main.cpp src/defs.h src/Mesh.cpp src/Mesh.h src/Utils.cpp src/Utils.h src/Renderer.cpp src/Renderer.h src/Light.cpp src/Light.h src/Camera.cpp src/Camera.h src/KDTree.cpp src/KDTree.h src/Random.cpp src/Random.h src/NormalCoord.cpp src/NormalCoord.h src/configs.h)
+add_executable(cg_ray_tracer libs/glm/gtx/intersect.hpp src/main.cpp src/utils/defs.h src/mesh/Mesh.cpp src/mesh/Mesh.h src/utils/Utils.cpp src/utils/Utils.h src/renderer/Renderer.cpp src/renderer/Renderer.h src/light/Light.cpp src/light/Light.h src/camera/Camera.cpp src/camera/Camera.h src/kdtree/KDTree.cpp src/kdtree/KDTree.h src/utils/Random.cpp src/utils/Random.h src/utils/NormalCoord.cpp src/utils/NormalCoord.h src/configs.h)
 
 target_link_libraries(cg_ray_tracer OpenMP::OpenMP_CXX)
