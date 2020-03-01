@@ -10,7 +10,7 @@
 #include <iostream>
 #include "defs.h"
 #include "Mesh.h"
-#include "libs/glm/ext.hpp"
+#include "../libs/glm/ext.hpp"
 
 const int LEAF_TRIANGLE_CNT = 5;
 

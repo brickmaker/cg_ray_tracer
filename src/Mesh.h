@@ -8,9 +8,9 @@
 #include <utility>
 #include <iostream>
 
-#include "libs/tiny_obj_loader.h"
-#include "libs/glm/glm.hpp"
-#include "libs/glm/ext.hpp"
+#include "../libs/tiny_obj_loader.h"
+#include "../libs/glm/glm.hpp"
+#include "../libs/glm/ext.hpp"
 #include "defs.h"
 
 struct Mesh {

@@ -6,7 +6,7 @@
 #define CG_RAY_TRACER_RANDOM_H
 
 
-#include "libs/glm/vec3.hpp"
+#include "../libs/glm/vec3.hpp"
 #include "defs.h"
 
 struct Random {

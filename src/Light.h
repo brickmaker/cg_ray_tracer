@@ -9,9 +9,9 @@
 #include <cmath>
 
 #include <string>
-#include "libs/glm/vec3.hpp"
-#include "libs/glm/ext.hpp"
-#include "libs/glm/gtx/norm.hpp"
+#include "../libs/glm/vec3.hpp"
+#include "../libs/glm/ext.hpp"
+#include "../libs/glm/gtx/norm.hpp"
 #include "NormalCoord.h"
 #include "Random.h"
 #include "Mesh.h"

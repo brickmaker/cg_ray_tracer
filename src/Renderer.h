@@ -8,8 +8,8 @@
 
 #define GLM_ENABLE_EXPERIMENTAL
 
-#include "libs/glm/glm.hpp"
-#include "libs/glm/ext.hpp"
+#include "../libs/glm/glm.hpp"
+#include "../libs/glm/ext.hpp"
 
 #include "Mesh.h"
 #include "Light.h"
