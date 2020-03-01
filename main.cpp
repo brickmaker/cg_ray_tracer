@@ -12,9 +12,9 @@
 #include "KDTree.h"
 
 #define CBOX 0
-#define DINNING 0
+#define DINNING 1
 #define MIS 0
-#define ROOM 1
+#define ROOM 0
 
 
 int main() {
