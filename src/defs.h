@@ -11,6 +11,8 @@
 #include "../libs/glm/glm.hpp"
 #include "../libs/glm/ext.hpp"
 
+#include "configs.h"
+
 typedef float float_t;
 
 typedef std::vector<std::vector<glm::vec3>> buffer_t;
@@ -18,8 +20,6 @@ typedef std::vector<glm::vec3> buffer_row_t;
 
 const float_t FLOAT_INF = std::numeric_limits<float_t>::max();
 const float_t EPSILON = 1e-3;
-const int SPP = 1024;
-const int MAX_DEPTH = 10;
 const float_t PI = glm::pi<float_t>();
 
 struct Ray {

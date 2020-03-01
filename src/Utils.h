@@ -10,7 +10,7 @@
 #include "Mesh.h"
 
 struct Utils {
-    static void save_img(buffer_t buffer);
+    static void save_img(buffer_t buffer, const std::string &path);
 
     static glm::vec3 reflect_direction(glm::vec3 normal, glm::vec3 in_direction);
 

@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 project(cg_ray_tracer)
 
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
 
@@ -26,6 +27,6 @@ find_package(OpenMP REQUIRED)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(cg_ray_tracer libs/glm/gtx/intersect.hpp src/main.cpp src/defs.h src/Mesh.cpp src/Mesh.h src/Utils.cpp src/Utils.h src/Renderer.cpp src/Renderer.h src/Light.cpp src/Light.h src/Camera.cpp src/Camera.h src/KDTree.cpp src/KDTree.h src/Random.cpp src/Random.h src/NormalCoord.cpp src/NormalCoord.h)
+add_executable(cg_ray_tracer libs/glm/gtx/intersect.hpp src/main.cpp src/defs.h src/Mesh.cpp src/Mesh.h src/Utils.cpp src/Utils.h src/Renderer.cpp src/Renderer.h src/Light.cpp src/Light.h src/Camera.cpp src/Camera.h src/KDTree.cpp src/KDTree.h src/Random.cpp src/Random.h src/NormalCoord.cpp src/NormalCoord.h src/configs.h)
 
 target_link_libraries(cg_ray_tracer OpenMP::OpenMP_CXX)

@@ -5,12 +5,12 @@
 #include "Utils.h"
 #include "../libs/glm/gtx/norm.hpp"
 
-void Utils::save_img(buffer_t buffer) {
+void Utils::save_img(buffer_t buffer, const std::string &path) {
     const int height = buffer.size();
     const int width = buffer[0].size();
     // save framebuffer to file
     std::ofstream ofs;
-    ofs.open("out.ppm");
+    ofs.open(path);
     ofs << "P6\n" << width << " " << height << "\n255\n";
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
