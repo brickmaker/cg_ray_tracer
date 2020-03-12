@@ -7,8 +7,11 @@ Homework for Graduate Student Computer Graphics Course in ZJU.
 ## Results
 
 ![cbox](./results/png/cbox-1024.png)
+
 ![diningroom](./results/png/diningroom-512.png)
+
 ![veach_mis](./results/png/veach_mis-512.png)
+
 ![room](./results/png/room-1024.png)
 
 ## Features
