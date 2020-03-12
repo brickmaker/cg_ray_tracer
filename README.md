@@ -35,9 +35,9 @@ Homework for Graduate Student Computer Graphics Course in ZJU.
 * Develop under MacOS 10.15
 * C++14
 * using libraries:
-    * glm: https://github.com/g-truc/glm
-    * tinyobjloader: https://github.com/tinyobjloader/tinyobjloader
-    * OpenMP: https://en.wikipedia.org/wiki/OpenMP
+    * glm(header only, added in repo): https://github.com/g-truc/glm
+    * tinyobjloader (header only, added in repo): https://github.com/tinyobjloader/tinyobjloader
+    * OpenMP (on MacOS: `brew install libomp`): https://en.wikipedia.org/wiki/OpenMP
 
 ## Build & Run
 
@@ -51,3 +51,6 @@ cmake CMakeList.txt
 make
 ./cg-ray-tracer
 ```
+
+Config including model path, spp and recursive depth can be specified in `src/config.h`
+
